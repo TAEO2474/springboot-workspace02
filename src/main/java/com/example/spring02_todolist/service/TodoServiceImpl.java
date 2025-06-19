@@ -1,17 +1,11 @@
 package com.example.spring02_todolist.service;
 
-import java.beans.Transient;
+
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
+
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,11 +61,10 @@ public class TodoServiceImpl implements TodoService {
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void delete (int id) throws Exception {
-		
-			
-			todoRepository.deleteById(id);
-		
+	public void delete (int id) throws Exception {	
+		   if(!todoRepository.existsById(id)) {
+			   throw new Exception("id"+id+"는 아이디가 존재하지 않습니다");
+		   } // 해당 ID가 존재하지 않을 경우 → 예외를 던집니다
+			todoRepository.deleteById(id);		
 	}
-
 }
