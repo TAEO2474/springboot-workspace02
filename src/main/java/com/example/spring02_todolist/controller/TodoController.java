@@ -51,21 +51,18 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class TodoController {
 
-    private final TodoRepository todoRepository;
 	
 	//DI(Dependency Injection): 의존성 주입
 	@Autowired
 	private TodoService todoService;
 
-	public TodoController(TodoRepository todoRepository) {
-        this.todoRepository = todoRepository;
-
-    }
+	
 	
 	@GetMapping(value="/todo/all")
 	public ResponseEntity<List<TodoDTO>> getList()  throws Exception{
 		//log.info("getList()=>{}", todoService.search());
 		//return new ResponseEntity<List<TodoDTO>>(todoService.search(),HttpStatus.OK);
+	   
 		return ResponseEntity.ok(todoService.search());
 	}
 	
