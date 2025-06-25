@@ -68,19 +68,22 @@ public class TodoController {
 	
 	//{"completed":0, "todoname":"잠자기"}
 		@PostMapping(value="/todo")
-		public ResponseEntity<HashMap<String, String>> postTodo(@RequestBody TodoDTO dto) {
+		public ResponseEntity<HashMap<String, Object>> postTodo(@RequestBody TodoDTO dto) {
 			try {
-				todoService.insert(dto);
-				HashMap<String, String> map = new HashMap<String, String>();
+				TodoDTO todoDTO = todoService.insert(dto);
+				log.info("insert",dto);
+				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("createDate", new Date().toString());
 				map.put("message", "Insert OK");
+				map.put("todoDTO", todoDTO);
+				
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(new MediaType("application","json",Charset.forName("UTF-8")));
 				
 				//return new ResponseEntity<HashMap<String, String>>(map, headers, HttpStatus.OK);
 				return ResponseEntity.ok().headers(headers).body(map);
 			}catch(Exception e) {
-				HashMap<String, String> errorMap = new HashMap<String, String>();
+				HashMap<String, Object> errorMap = new HashMap<String, Object>();
 				errorMap.put("createDate", new Date().toString());
 				errorMap.put("message", "등록 실패: " + e.getMessage());
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMap);

@@ -39,15 +39,19 @@ public class TodoServiceImpl implements TodoService {
 									.collect(Collectors.toList());
 		return listTodoDTO;
 	}
+	
+	
 	@Transactional(rollbackFor =Exception.class)
 	@Override
-	public void insert(TodoDTO dto) throws Exception {
+	public TodoDTO insert(TodoDTO dto) throws Exception {
 		 TodoEntity insert = todoRepository.save(dto.toEntity());
 		 log.info("insert=>{}", insert);
 		 
 		 //예외발생시 테스트용 코드 (주석 해제시 롤백확인 가능)
-		 if(true) throw new Exception("강제예외발생");
+		// if(true) throw new Exception("강제예외발생");
 		
+		 TodoDTO todoDTO = TodoDTO.toDTO(insert);
+		 return todoDTO;
 	}
 	@Transactional(rollbackFor=Exception.class)
 	@Override
@@ -61,6 +65,7 @@ public class TodoServiceImpl implements TodoService {
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
+	
 	public void delete (int id) throws Exception {	
 		   if(!todoRepository.existsById(id)) {
 			   throw new Exception("id"+id+"는 아이디가 존재하지 않습니다");
